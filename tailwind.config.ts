@@ -18,7 +18,26 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'tajawal': ['Tajawal', 'sans-serif'],
+			},
 			colors: {
+				// Tahya Misr Brand Colors
+				'tahya-red': {
+					DEFAULT: 'hsl(var(--tahya-red))',
+					light: 'hsl(var(--tahya-red-light))',
+					dark: 'hsl(var(--tahya-red-dark))',
+				},
+				'tahya-gold': 'hsl(var(--tahya-gold))',
+				
+				// Chat specific colors
+				'chat-bg': 'hsl(var(--chat-bg))',
+				'user-message': 'hsl(var(--user-message))',
+				'user-message-foreground': 'hsl(var(--user-message-foreground))',
+				'bot-message': 'hsl(var(--bot-message))',
+				'bot-message-foreground': 'hsl(var(--bot-message-foreground))',
+				
+				// Standard colors
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -52,16 +71,14 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
-				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				}
+			},
+			backgroundImage: {
+				'gradient-tahya': 'var(--gradient-tahya)',
+				'gradient-subtle': 'var(--gradient-subtle)',
+			},
+			boxShadow: {
+				'elegant': 'var(--shadow-elegant)',
+				'soft': 'var(--shadow-soft)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +101,33 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'slide-in-right': {
+					from: {
+						opacity: '0',
+						transform: 'translateX(30px)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'translateX(0)'
+					}
+				},
+				'slide-in-left': {
+					from: {
+						opacity: '0',
+						transform: 'translateX(-30px)'
+					},
+					to: {
+						opacity: '1',
+						transform: 'translateX(0)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'slide-in-right': 'slide-in-right 0.3s ease-out',
+				'slide-in-left': 'slide-in-left 0.3s ease-out'
 			}
 		}
 	},
