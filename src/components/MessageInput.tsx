@@ -8,7 +8,7 @@ interface MessageInputProps {
   placeholder?: string;
 }
 
-const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل عن أي شئ." }: MessageInputProps) => {
+const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل عن أي شئ..." }: MessageInputProps) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -89,7 +89,6 @@ const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل
             <span className="hidden sm:inline">إرسال</span>
           </Button>
         </div>
-        
       </div>
     </div>
   );
