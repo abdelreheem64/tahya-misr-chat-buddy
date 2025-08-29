@@ -5,6 +5,7 @@ import { sendMessage } from '@/services/chatApi';
 import Message from './Message';
 import MessageInput from './MessageInput';
 import TypingIndicator from './TypingIndicator';
+import WelcomeScreen from './WelcomeScreen';
 import { useToast } from '@/hooks/use-toast';
 
 interface ChatMessage {
@@ -17,35 +18,12 @@ interface ChatMessage {
 const Chat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showWelcome, setShowWelcome] = useState(true);
   const [showFooter, setShowFooter] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const userId = useUserId();
   const { playMessageSent } = useAudio();
   const { toast } = useToast();
-
-  // Welcome message with keywords
-  useEffect(() => {
-    if (userId) {
-      const welcomeMessage: ChatMessage = {
-        id: 'welcome',
-        message: `**مرحبًا بك في اتحاد طلاب تحيا مصر** 🎓
-
-أنا هنا لمساعدتك في الحصول على المعلومات التي تحتاجها حول:
-
-• **رؤية الاتحاد ورسالته وأهدافه**
-• **وصف تفصيلي للجنة مركزية معينة**
-• **المشاريع والمبادرات الكبيرة**
-• **الفئات اللي بنستهدفها في شغلنا**
-• **الهيكل الإداري التنظيمي المركزي**
-• **مجلس المنسقين**
-
-اسأل عن أي شيء يخص الكيان الشبابي وسأكون سعيد لمساعدتك! 😊`,
-        isUser: false,
-        timestamp: new Date(),
-      };
-      setMessages([welcomeMessage]);
-    }
-  }, [userId]);
 
   // Auto-scroll to bottom
   useEffect(() => {
@@ -55,7 +33,10 @@ const Chat = () => {
   const handleSendMessage = async (messageText: string) => {
     if (!userId) return;
 
-    // Hide footer after first message
+    // Hide welcome screen and footer after first message
+    if (showWelcome) {
+      setShowWelcome(false);
+    }
     if (showFooter) {
       setShowFooter(false);
     }
@@ -110,23 +91,33 @@ const Chat = () => {
     }
   };
 
+  const handleSuggestedQuestion = (question: string) => {
+    handleSendMessage(question);
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] bg-gradient-subtle">
-      {/* Messages container */}
-      <div className="flex-1 overflow-y-auto chat-container">
+      {/* Welcome screen or Messages container */}
+      <div className="flex-1 overflow-y-auto">
         <div className="container mx-auto max-w-4xl">
-          {messages.map((message) => (
-            <Message
-              key={message.id}
-              message={message.message}
-              isUser={message.isUser}
-              timestamp={message.timestamp}
-            />
-          ))}
-          
-          {isLoading && <TypingIndicator />}
-          
-          <div ref={messagesEndRef} />
+          {showWelcome ? (
+            <WelcomeScreen onSuggestedQuestion={handleSuggestedQuestion} />
+          ) : (
+            <>
+              {messages.map((message) => (
+                <Message
+                  key={message.id}
+                  message={message.message}
+                  isUser={message.isUser}
+                  timestamp={message.timestamp}
+                />
+              ))}
+              
+              {isLoading && <TypingIndicator />}
+              
+              <div ref={messagesEndRef} />
+            </>
+          )}
         </div>
       </div>
 
@@ -134,6 +125,7 @@ const Chat = () => {
       <MessageInput 
         onSendMessage={handleSendMessage}
         disabled={isLoading || !userId}
+        placeholder={showWelcome ? "اكتب رسالتك هنا..." : "اسأل عن أي شئ."}
       />
       
       {/* Footer - appears only before first message */}

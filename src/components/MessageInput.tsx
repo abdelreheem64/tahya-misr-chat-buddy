@@ -5,9 +5,10 @@ import { Button } from './ui/button';
 interface MessageInputProps {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
+  placeholder?: string;
 }
 
-const MessageInput = ({ onSendMessage, disabled = false }: MessageInputProps) => {
+const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل عن أي شئ." }: MessageInputProps) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -51,7 +52,7 @@ const MessageInput = ({ onSendMessage, disabled = false }: MessageInputProps) =>
               value={message}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              placeholder="اسأل عن أي شئ."
+              placeholder={placeholder}
               disabled={disabled}
               className="
                 w-full min-h-[44px] max-h-[120px] p-3 pr-4 pl-12
