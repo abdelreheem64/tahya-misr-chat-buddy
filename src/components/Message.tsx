@@ -17,7 +17,7 @@ const Message = ({ message, isUser, timestamp }: MessageProps) => {
       if (paragraph.includes('**')) {
         const parts = paragraph.split('**');
         return (
-          <p key={index} className="mb-2">
+          <p key={index} className="mb-3">
             {parts.map((part, partIndex) => 
               partIndex % 2 === 1 ? (
                 <strong key={partIndex} className="font-bold text-tahya-red">{part}</strong>
@@ -32,16 +32,41 @@ const Message = ({ message, isUser, timestamp }: MessageProps) => {
       // Check if it's a list item (starts with - or •)
       if (paragraph.trim().startsWith('-') || paragraph.trim().startsWith('•')) {
         return (
-          <p key={index} className="mb-1 pr-4">
-            <span className="text-tahya-gold ml-2">•</span>
-            {paragraph.replace(/^[-•]\s*/, '')}
+          <div key={index} className="mb-2 flex items-start gap-2">
+            <span className="text-tahya-gold mt-1 flex-shrink-0">•</span>
+            <span className="flex-1">{paragraph.replace(/^[-•]\s*/, '')}</span>
+          </div>
+        );
+      }
+      
+      // Check for links (basic URL detection)
+      if (paragraph.includes('http')) {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        const parts = paragraph.split(urlRegex);
+        return (
+          <p key={index} className="mb-3 last:mb-0">
+            {parts.map((part, partIndex) => 
+              urlRegex.test(part) ? (
+                <a 
+                  key={partIndex} 
+                  href={part} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-tahya-red hover:text-tahya-red/80 underline"
+                >
+                  {part}
+                </a>
+              ) : (
+                part
+              )
+            )}
           </p>
         );
       }
       
       // Regular paragraph
       return (
-        <p key={index} className="mb-2 last:mb-0">
+        <p key={index} className="mb-3 last:mb-0 leading-relaxed">
           {paragraph}
         </p>
       );

@@ -38,20 +38,7 @@ const Header = () => {
               `}>
                 اتحاد طلاب تحيا مصر
               </h1>
-              <p className={`
-                text-sm transition-colors duration-300
-                ${isScrolled ? 'text-tahya-red/70' : 'text-white/90'}
-              `}>
-                المساعد الذكي
-              </p>
             </div>
-          </div>
-          
-          <div className={`
-            text-sm font-medium transition-colors duration-300
-            ${isScrolled ? 'text-tahya-red/70' : 'text-white/90'}
-          `}>
-            اسأل عن أي شيء
           </div>
         </div>
       </div>

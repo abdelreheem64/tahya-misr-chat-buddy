@@ -5,7 +5,6 @@ import { sendMessage } from '@/services/chatApi';
 import Message from './Message';
 import MessageInput from './MessageInput';
 import TypingIndicator from './TypingIndicator';
-import OneTimeNotice from './OneTimeNotice';
 import { useToast } from '@/hooks/use-toast';
 
 interface ChatMessage {
@@ -18,18 +17,29 @@ interface ChatMessage {
 const Chat = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [showNotice, setShowNotice] = useState(true);
+  const [showFooter, setShowFooter] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const userId = useUserId();
   const { playMessageSent } = useAudio();
   const { toast } = useToast();
 
-  // Welcome message
+  // Welcome message with keywords
   useEffect(() => {
     if (userId) {
       const welcomeMessage: ChatMessage = {
         id: 'welcome',
-        message: 'مرحبًا بك 👋 أنا المساعد الذكي لاتحاد طلاب تحيا مصر.\nمهمتي أساعدك في أي سؤال متعلق بالكيان الشبابي',
+        message: `**مرحبًا بك في اتحاد طلاب تحيا مصر** 🎓
+
+أنا هنا لمساعدتك في الحصول على المعلومات التي تحتاجها حول:
+
+• **رؤية الاتحاد ورسالته وأهدافه**
+• **وصف تفصيلي للجنة مركزية معينة**
+• **المشاريع والمبادرات الكبيرة**
+• **الفئات اللي بنستهدفها في شغلنا**
+• **الهيكل الإداري التنظيمي المركزي**
+• **مجلس المنسقين**
+
+اسأل عن أي شيء يخص الكيان الشبابي وسأكون سعيد لمساعدتك! 😊`,
         isUser: false,
         timestamp: new Date(),
       };
@@ -44,6 +54,11 @@ const Chat = () => {
 
   const handleSendMessage = async (messageText: string) => {
     if (!userId) return;
+
+    // Hide footer after first message
+    if (showFooter) {
+      setShowFooter(false);
+    }
 
     // Play send sound
     playMessageSent();
@@ -97,11 +112,6 @@ const Chat = () => {
 
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] bg-gradient-subtle">
-      {/* One-time notice */}
-      {showNotice && (
-        <OneTimeNotice onClose={() => setShowNotice(false)} />
-      )}
-
       {/* Messages container */}
       <div className="flex-1 overflow-y-auto chat-container">
         <div className="container mx-auto max-w-4xl">
@@ -125,6 +135,17 @@ const Chat = () => {
         onSendMessage={handleSendMessage}
         disabled={isLoading || !userId}
       />
+      
+      {/* Footer - appears only before first message */}
+      {showFooter && (
+        <div className="bg-background border-t border-border/50">
+          <div className="container mx-auto max-w-4xl px-4 py-2">
+            <p className="text-xs text-muted-foreground/60 text-center">
+              لجنة التنظيم المركزية – اتحاد طلاب تحيا مصر
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

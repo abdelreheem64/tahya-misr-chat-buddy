@@ -51,7 +51,7 @@ const MessageInput = ({ onSendMessage, disabled = false }: MessageInputProps) =>
               value={message}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
-              placeholder="اسأل عن أي شيء متعلق بالكيان الشبابي..."
+              placeholder="اسأل عن أي شئ."
               disabled={disabled}
               className="
                 w-full min-h-[44px] max-h-[120px] p-3 pr-4 pl-12
@@ -89,9 +89,6 @@ const MessageInput = ({ onSendMessage, disabled = false }: MessageInputProps) =>
           </Button>
         </div>
         
-        <p className="text-xs text-muted-foreground mt-2 text-center">
-          اضغط Enter للإرسال، Shift + Enter لسطر جديد
-        </p>
       </div>
     </div>
   );
