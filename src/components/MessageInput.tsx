@@ -6,9 +6,17 @@ interface MessageInputProps {
   onSendMessage: (message: string) => void;
   disabled?: boolean;
   placeholder?: string;
+  onInputFocus?: () => void;
+  onInputChange?: () => void;
 }
 
-const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل عن أي شئ..." }: MessageInputProps) => {
+const MessageInput = ({ 
+  onSendMessage, 
+  disabled = false, 
+  placeholder = "اسأل عن أي شئ...",
+  onInputFocus,
+  onInputChange: onInputChangeCallback
+}: MessageInputProps) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -35,10 +43,21 @@ const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(e.target.value);
     
+    // Call the callback when user starts typing
+    if (onInputChangeCallback) {
+      onInputChangeCallback();
+    }
+    
     // Auto-resize textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
+    }
+  };
+
+  const handleFocus = () => {
+    if (onInputFocus) {
+      onInputFocus();
     }
   };
 
@@ -51,6 +70,7 @@ const MessageInput = ({ onSendMessage, disabled = false, placeholder = "اسأل
               ref={textareaRef}
               value={message}
               onChange={handleInputChange}
+              onFocus={handleFocus}
               onKeyPress={handleKeyPress}
               placeholder={placeholder}
               disabled={disabled}

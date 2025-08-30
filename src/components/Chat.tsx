@@ -20,6 +20,7 @@ const Chat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showWelcome, setShowWelcome] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
   const userId = useUserId();
   const { playMessageSent } = useAudio();
   const { toast } = useToast();
@@ -28,6 +29,28 @@ const Chat = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isLoading]);
+
+  // Function to scroll to bottom
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  // Handle input focus - scroll to bottom
+  const handleInputFocus = () => {
+    setTimeout(() => {
+      scrollToBottom();
+    }, 100); // Small delay to ensure keyboard is shown on mobile
+  };
+
+  // Handle input change - scroll to bottom when user starts typing
+  const handleInputChange = () => {
+    scrollToBottom();
+  };
 
   const handleSendMessage = async (messageText: string) => {
     if (!userId) return;
@@ -94,7 +117,10 @@ const Chat = () => {
   return (
     <div className="relative h-[calc(100vh-80px)] bg-gradient-subtle">
       {/* Messages container - scrollable area */}
-      <div className="absolute inset-0 pb-32 overflow-y-auto chat-container">
+      <div 
+        ref={chatContainerRef}
+        className="absolute inset-0 pb-32 overflow-y-auto chat-container"
+      >
         <div className="container mx-auto max-w-4xl min-h-full">
           {showWelcome ? (
             <WelcomeScreen onSuggestedQuestion={handleSuggestedQuestion} />
@@ -121,6 +147,8 @@ const Chat = () => {
       <div className="absolute bottom-0 left-0 right-0 bg-background border-t border-border">
         <MessageInput 
           onSendMessage={handleSendMessage}
+          onInputFocus={handleInputFocus}
+          onInputChange={handleInputChange}
           disabled={isLoading || !userId}
           placeholder="اسأل عن أي شئ..."
         />
@@ -129,7 +157,7 @@ const Chat = () => {
         <div className="border-t border-border/30">
           <div className="container mx-auto max-w-4xl px-4 py-2">
             <p className="text-xs text-muted-foreground/60 text-center">
-              <span className="font-bold">لجنة التنظيم المركزية – اتحاد طلاب تحيا مصر</span>
+              <span className="font-bold text-tahya-red">لجنة التنظيم المركزية – اتحاد طلاب تحيا مصر</span>
             </p>
           </div>
         </div>
