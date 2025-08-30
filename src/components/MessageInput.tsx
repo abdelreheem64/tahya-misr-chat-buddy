@@ -59,10 +59,18 @@ const MessageInput = ({
     if (onInputFocus) {
       onInputFocus();
     }
+    
+    // تمرير إضافي لضمان ظهور خانة الإدخال بالكامل
+    setTimeout(() => {
+      window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+      });
+    }, 300);
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 bg-background">
       <div className="container mx-auto max-w-4xl">
         <div className="flex items-end gap-3">
           <div className="flex-1 relative">

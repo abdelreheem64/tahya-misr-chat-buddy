@@ -115,17 +115,17 @@ const Chat = () => {
   };
 
   return (
-    <div className="relative h-[calc(100vh-80px)] bg-gradient-subtle">
+    <div className="flex flex-col h-[calc(100vh-80px)] bg-gradient-subtle">
       {/* Messages container - scrollable area */}
       <div 
         ref={chatContainerRef}
-        className="absolute inset-0 pb-32 overflow-y-auto chat-container"
+        className="flex-1 overflow-y-auto chat-container"
       >
         <div className="container mx-auto max-w-4xl min-h-full">
           {showWelcome ? (
             <WelcomeScreen onSuggestedQuestion={handleSuggestedQuestion} />
           ) : (
-            <div className="pb-4">
+            <div className="pb-6 pt-4">
               {messages.map((message) => (
                 <Message
                   key={message.id}
@@ -144,7 +144,7 @@ const Chat = () => {
       </div>
 
       {/* Fixed input area at bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-background border-t border-border">
+      <div className="flex-shrink-0 bg-background border-t border-border">
         <MessageInput 
           onSendMessage={handleSendMessage}
           onInputFocus={handleInputFocus}
@@ -154,7 +154,7 @@ const Chat = () => {
         />
         
         {/* Footer */}
-        <div className="border-t border-border/30">
+        <div className="border-t border-border/30 bg-background">
           <div className="container mx-auto max-w-4xl px-4 py-2">
             <p className="text-xs text-muted-foreground/60 text-center">
               <span className="font-bold text-tahya-red">لجنة التنظيم المركزية – اتحاد طلاب تحيا مصر</span>
