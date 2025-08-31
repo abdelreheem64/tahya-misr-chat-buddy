@@ -1,4 +1,4 @@
-import { useState, useRef, KeyboardEvent } from 'react';
+import { useState, useRef, KeyboardEvent, forwardRef, useImperativeHandle } from 'react';
 import { Send, Mic } from 'lucide-react';
 import { Button } from './ui/button';
 
@@ -10,15 +10,34 @@ interface MessageInputProps {
   onInputChange?: () => void;
 }
 
-const MessageInput = ({ 
+export interface MessageInputRef {
+  fillInput: (text: string) => void;
+}
+
+const MessageInput = forwardRef<MessageInputRef, MessageInputProps>(({ 
   onSendMessage, 
   disabled = false, 
   placeholder = "اسأل عن أي شئ...",
   onInputFocus,
   onInputChange: onInputChangeCallback
-}: MessageInputProps) => {
+}, ref) => {
   const [message, setMessage] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useImperativeHandle(ref, () => ({
+    fillInput: (text: string) => {
+      setMessage(text);
+      // Focus on the textarea after filling
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+          // Auto-resize textarea
+          textareaRef.current.style.height = 'auto';
+          textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
+        }
+      }, 100);
+    }
+  }), []);
 
   const handleSubmit = () => {
     const trimmedMessage = message.trim();
@@ -120,6 +139,8 @@ const MessageInput = ({
       </div>
     </div>
   );
-};
+});
+
+MessageInput.displayName = 'MessageInput';
 
 export default MessageInput;

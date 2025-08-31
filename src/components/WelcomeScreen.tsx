@@ -3,9 +3,10 @@ import { Button } from './ui/button';
 
 interface WelcomeScreenProps {
   onSuggestedQuestion: (question: string) => void;
+  onFillInput: (question: string) => void;
 }
 
-const WelcomeScreen = ({ onSuggestedQuestion }: WelcomeScreenProps) => {
+const WelcomeScreen = ({ onSuggestedQuestion, onFillInput }: WelcomeScreenProps) => {
   const suggestions = [
     "رؤية الاتحاد ورسالته وأهدافه",
     "المشاريع والمبادرات الكبيرة", 
@@ -45,7 +46,7 @@ const WelcomeScreen = ({ onSuggestedQuestion }: WelcomeScreenProps) => {
             <Button
               key={index}
               variant="outline"
-              onClick={() => onSuggestedQuestion(suggestion)}
+              onClick={() => onFillInput(suggestion)}
               className="
                 h-auto p-4 text-right justify-start
                 bg-card hover:bg-accent/50 border-border

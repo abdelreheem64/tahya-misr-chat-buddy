@@ -21,6 +21,7 @@ const Chat = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  const messageInputRef = useRef<any>(null);
   const userId = useUserId();
   const { playMessageSent } = useAudio();
   const { toast } = useToast();
@@ -114,6 +115,11 @@ const Chat = () => {
     handleSendMessage(question);
   };
 
+  const handleFillInput = (question: string) => {
+    // This will be handled by MessageInput component
+    // We'll pass this function to WelcomeScreen
+  };
+
   return (
     <div className="flex flex-col h-[calc(100vh-80px)] bg-gradient-subtle">
       {/* Messages container - scrollable area */}
@@ -123,7 +129,17 @@ const Chat = () => {
       >
         <div className="container mx-auto max-w-4xl min-h-full">
           {showWelcome ? (
-            <WelcomeScreen onSuggestedQuestion={handleSuggestedQuestion} />
+            <WelcomeScreen 
+              onSuggestedQuestion={handleSuggestedQuestion}
+              onFillInput={(question) => {
+                // Hide welcome screen and fill input
+                setShowWelcome(false);
+                // We need to pass this to MessageInput
+                if (messageInputRef.current) {
+                  messageInputRef.current.fillInput(question);
+                }
+              }}
+            />
           ) : (
             <div className="pb-6 pt-4">
               {messages.map((message) => (
@@ -146,6 +162,7 @@ const Chat = () => {
       {/* Fixed input area at bottom */}
       <div className="flex-shrink-0 bg-background border-t border-border">
         <MessageInput 
+          ref={messageInputRef}
           onSendMessage={handleSendMessage}
           onInputFocus={handleInputFocus}
           onInputChange={handleInputChange}
